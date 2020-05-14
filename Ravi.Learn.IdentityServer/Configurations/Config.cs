@@ -14,6 +14,8 @@ namespace Ravi.Learn.IdentityServer.Configurations
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResources.Address(),
+                new IdentityResources.Email()
             };
 
 

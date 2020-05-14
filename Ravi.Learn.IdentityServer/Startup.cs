@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Ravi.Learn.IdentityServer.Configurations;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Ravi.Learn.IdentityServer
 {
@@ -52,6 +53,10 @@ namespace Ravi.Learn.IdentityServer
                     options.Events.RaiseSuccessEvents = true;
                 })
                 .AddTestUsers(TestUsers.Users)
+                .AddInMemoryIdentityResources(Config.Ids)
+                .AddInMemoryClients(Config.Clients)
+                .AddInMemoryApiResources(Config.Apis);
+                /*
                 
                 // this adds the config data from DB (clients, resources, CORS)
                 .AddConfigurationStore(options =>
@@ -66,9 +71,17 @@ namespace Ravi.Learn.IdentityServer
                     // this enables automatic token cleanup. this is optional.
                     options.EnableTokenCleanup = true;
                 });
+                */
 
             // not recommended for production - you need to store your key material somewhere secure
-            builder.AddDeveloperSigningCredential();
+            if (Environment.IsDevelopment())
+            {
+                builder.AddDeveloperSigningCredential();
+            }
+            else
+            {
+                builder.AddValidationKey(GetCertificate(CertificateTimeType.Previous));
+            }
 
             services.AddAuthentication()
                 .AddGoogle(options =>
@@ -101,5 +114,17 @@ namespace Ravi.Learn.IdentityServer
                 endpoints.MapDefaultControllerRoute();
             });
         }
+
+        public X509Certificate2 GetCertificate(CertificateTimeType certificateTimeType)
+        {
+            return null;
+        }
+    }
+
+    public enum CertificateTimeType
+    {
+        Current = 1,
+        Previous = 2,
+        Next = 3
     }
 }
