@@ -52,11 +52,11 @@ namespace Ravi.Learn.IdentityServer
                     options.Events.RaiseFailureEvents = true;
                     options.Events.RaiseSuccessEvents = true;
                 })
-                .AddTestUsers(TestUsers.Users)
-                .AddInMemoryIdentityResources(Config.Ids)
-                .AddInMemoryClients(Config.Clients)
-                .AddInMemoryApiResources(Config.Apis);
-                /*
+                //.AddTestUsers(TestUsers.Users)
+                //.AddInMemoryIdentityResources(Config.Ids)
+                //.AddInMemoryClients(Config.Clients)
+                //.AddInMemoryApiResources(Config.Apis);
+                
                 
                 // this adds the config data from DB (clients, resources, CORS)
                 .AddConfigurationStore(options =>
@@ -71,7 +71,7 @@ namespace Ravi.Learn.IdentityServer
                     // this enables automatic token cleanup. this is optional.
                     options.EnableTokenCleanup = true;
                 });
-                */
+                
 
             // not recommended for production - you need to store your key material somewhere secure
             if (Environment.IsDevelopment())
