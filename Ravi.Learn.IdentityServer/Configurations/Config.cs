@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityServer4;
 using IdentityServer4.Models;
 using System.Collections.Generic;
 
@@ -14,6 +15,8 @@ namespace Ravi.Learn.IdentityServer.Configurations
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResources.Address(),
+                new IdentityResources.Email()
             };
 
 
@@ -55,6 +58,24 @@ namespace Ravi.Learn.IdentityServer.Configurations
 
                     AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile", "api1" }
+                },
+
+                //Image Gallery Client
+                new Client
+                {
+                    ClientId = "imagegalleryclient",
+                    ClientName = "Image Gallery",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RedirectUris = { "https://localhost:44389/signin-oidc" },
+                    PostLogoutRedirectUris = { "https://localhost:44389/signout-callback-oidc" },
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Address,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email
+                    },
+                    ClientSecrets = { new Secret ("D7B60E4F-1924-462E-9DA4-A6A18CD997ED".Sha256()) }
                 },
 
                 // SPA client using code flow + pkce
