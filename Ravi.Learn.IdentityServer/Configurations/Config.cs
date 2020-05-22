@@ -73,7 +73,8 @@ namespace Ravi.Learn.IdentityServer.Configurations
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Address,
                         IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.Email
+                        IdentityServerConstants.StandardScopes.Email,
+                        "api1"
                     },
                     ClientSecrets = { new Secret ("D7B60E4F-1924-462E-9DA4-A6A18CD997ED".Sha256()) }
                 },
