@@ -24,7 +24,8 @@ namespace Ravi.Learn.IdentityServer.Configurations
         public static IEnumerable<ApiResource> Apis =>
             new ApiResource[]
             {
-                new ApiResource("api1", "My API #1")
+                new ApiResource("api1", "My API #1"),
+                new ApiResource("imagegalleryapi", "Image Gallery Api")
             };
 
 
@@ -75,7 +76,7 @@ namespace Ravi.Learn.IdentityServer.Configurations
                         IdentityServerConstants.StandardScopes.Address,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "api1",
+                        "imagegalleryapi",
                         "roles"
                     },
                     ClientSecrets = { new Secret ("D7B60E4F-1924-462E-9DA4-A6A18CD997ED".Sha256()) }

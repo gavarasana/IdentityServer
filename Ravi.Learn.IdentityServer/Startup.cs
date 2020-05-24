@@ -48,7 +48,8 @@ namespace Ravi.Learn.IdentityServer
             services.AddSingleton<IProfileService, TestUserProfileService>();
             services.AddSingleton<TestUserStore>(new TestUserStore(TestUsers.Users));
 
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            var idpConfigurationConnectionString = Configuration.GetConnectionString("IdpConfigurationDb");
+            var idpGrantsConnectionString = Configuration.GetConnectionString("IdpGrantsDb");
 
             var builder = services.AddIdentityServer(options =>
                 {
@@ -67,12 +68,12 @@ namespace Ravi.Learn.IdentityServer
                 // this adds the config data from DB (clients, resources, CORS)
                 .AddConfigurationStore(options =>
                 {
-                    options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString, sql=>sql.MigrationsAssembly("Ravi.Learn.IdentityServer"));
+                    options.ConfigureDbContext = builder => builder.UseSqlServer(idpConfigurationConnectionString, sql=>sql.MigrationsAssembly("Ravi.Learn.IdentityServer"));
                 })
                 // this adds the operational data from DB (codes, tokens, consents)
                 .AddOperationalStore(options =>
                 {
-                    options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString, sql => sql.MigrationsAssembly("Ravi.Learn.IdentityServer"));
+                    options.ConfigureDbContext = builder => builder.UseSqlServer(idpGrantsConnectionString, sql => sql.MigrationsAssembly("Ravi.Learn.IdentityServer"));
 
                     // this enables automatic token cleanup. this is optional.
                     options.EnableTokenCleanup = true;
@@ -84,10 +85,10 @@ namespace Ravi.Learn.IdentityServer
             {
                 builder.AddDeveloperSigningCredential();
             }
-            else
-            {
-                builder.AddValidationKey(GetCertificate(CertificateTimeType.Previous));
-            }
+            //else
+            //{
+            //    builder.AddValidationKey(GetCertificate(CertificateTimeType.Previous));
+            //}
 
             services.AddAuthentication()
                 .AddGoogle(options =>
@@ -121,10 +122,10 @@ namespace Ravi.Learn.IdentityServer
             });
         }
 
-        public X509Certificate2 GetCertificate(CertificateTimeType certificateTimeType)
-        {
-            return null;
-        }
+        //public X509Certificate2 GetCertificate(CertificateTimeType certificateTimeType)
+        //{
+        //    return null;
+        //}
     }
 
     public enum CertificateTimeType
