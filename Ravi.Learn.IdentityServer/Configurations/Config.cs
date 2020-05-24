@@ -16,7 +16,8 @@ namespace Ravi.Learn.IdentityServer.Configurations
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Address(),
-                new IdentityResources.Email()
+                new IdentityResources.Email(),
+                new IdentityResource("roles", "Your role(s)", new List<string> {"role"})
             };
 
 
@@ -67,13 +68,15 @@ namespace Ravi.Learn.IdentityServer.Configurations
                     ClientName = "Image Gallery",
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris = { "https://localhost:44389/signin-oidc" },
-                    PostLogoutRedirectUris = { "https://localhost:44389/signout-callback-oidc" },
+                    PostLogoutRedirectUris = { "https://localhost:44389/signout-callback-oidc" },                    
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Address,
                         IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.Email
+                        IdentityServerConstants.StandardScopes.Email,
+                        "api1",
+                        "roles"
                     },
                     ClientSecrets = { new Secret ("D7B60E4F-1924-462E-9DA4-A6A18CD997ED".Sha256()) }
                 },

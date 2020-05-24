@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Ravi.Learn.IdentityServer.Configurations;
 using System.Security.Cryptography.X509Certificates;
+using IdentityServer4.Test;
+using IdentityServer4.Services;
 
 namespace Ravi.Learn.IdentityServer
 {
@@ -43,6 +45,9 @@ namespace Ravi.Learn.IdentityServer
                 iis.AutomaticAuthentication = false;
             });
 
+            services.AddSingleton<IProfileService, TestUserProfileService>();
+            services.AddSingleton<TestUserStore>(new TestUserStore(TestUsers.Users));
+
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
             var builder = services.AddIdentityServer(options =>
@@ -52,6 +57,7 @@ namespace Ravi.Learn.IdentityServer
                     options.Events.RaiseFailureEvents = true;
                     options.Events.RaiseSuccessEvents = true;
                 })
+                .AddProfileService<TestUserProfileService>()
                 //.AddTestUsers(TestUsers.Users)
                 //.AddInMemoryIdentityResources(Config.Ids)
                 //.AddInMemoryClients(Config.Clients)
