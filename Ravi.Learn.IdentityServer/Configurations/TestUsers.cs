@@ -3,6 +3,7 @@
 
 
 using IdentityModel;
+using IdentityServer4.EntityFramework.Entities;
 using IdentityServer4.Test;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -22,7 +23,8 @@ namespace Ravi.Learn.IdentityServer.Configurations
                     new Claim(JwtClaimTypes.Email, "AliceSmith@email.com"),
                     new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                     new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                    new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json)
+                    new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
+                    new Claim(JwtClaimTypes.Role, "FreeUser")
                 }
             },
             new TestUser{SubjectId = "B4150C1F-8BA0-4AA7-9F8F-FFB3FBD92367", Username = "bob", Password = "bob", 
@@ -35,7 +37,8 @@ namespace Ravi.Learn.IdentityServer.Configurations
                     new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                     new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
                     new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'Two Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
-                    new Claim("location", "anywhere")
+                    new Claim("location", "anywhere"),
+                    new Claim(JwtClaimTypes.Role, "PaidUser")
                 }
             },
             new TestUser{SubjectId = "B9D6BA2B-F15A-4E04-9BB0-7104D189F69C", Username = "Frank", Password = "password",
@@ -47,7 +50,8 @@ namespace Ravi.Learn.IdentityServer.Configurations
                     new Claim(JwtClaimTypes.Email, "funderwood@email.com"),
                     new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                     new Claim(JwtClaimTypes.WebSite, "http://frankunderwood.com"),
-                    new Claim(JwtClaimTypes.Address, @"{ 'street_address': '123 Main Street', 'locality': 'Aldie', 'postal_code': 20101, 'country': 'USA' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json)
+                    new Claim(JwtClaimTypes.Address, @"{ 'street_address': '123 Main Street', 'locality': 'Aldie', 'postal_code': 20101, 'country': 'USA' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
+                    new Claim(JwtClaimTypes.Role,"PaidUser")
                 }
             },
             new TestUser{SubjectId = "9E5C49D9-EBB7-461C-9F9E-7785DB816302", Username = "Claire", Password = "password",
@@ -60,7 +64,8 @@ namespace Ravi.Learn.IdentityServer.Configurations
                     new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                     new Claim(JwtClaimTypes.WebSite, "http://claireunderwood.com"),
                     new Claim(JwtClaimTypes.Address, @"{ 'street_address': '234 South street', 'locality': 'Fairfax', 'postal_code': 20011, 'country': 'USA' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
-                    new Claim("location", "nowhere")
+                    new Claim("location", "nowhere"),
+                    new Claim(JwtClaimTypes.Role, "PaidUser")
                 }
             }
         };

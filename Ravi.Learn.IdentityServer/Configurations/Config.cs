@@ -16,7 +16,8 @@ namespace Ravi.Learn.IdentityServer.Configurations
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Address(),
-                new IdentityResources.Email()
+                new IdentityResources.Email(),
+                new IdentityResource("roles", "Your role(s)", new List<string> {"role"})
             };
 
 
@@ -74,7 +75,8 @@ namespace Ravi.Learn.IdentityServer.Configurations
                         IdentityServerConstants.StandardScopes.Address,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "api1"
+                        "api1",
+                        "roles"
                     },
                     ClientSecrets = { new Secret ("D7B60E4F-1924-462E-9DA4-A6A18CD997ED".Sha256()) }
                 },
