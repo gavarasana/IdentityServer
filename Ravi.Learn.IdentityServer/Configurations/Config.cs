@@ -25,7 +25,7 @@ namespace Ravi.Learn.IdentityServer.Configurations
             new ApiResource[]
             {
                 new ApiResource("api1", "My API #1"),
-                new ApiResource("imagegalleryapi", "Image Gallery Api")
+                new ApiResource("imagegalleryapi", "Image Gallery Api", new[] {"role"})
             };
 
 
