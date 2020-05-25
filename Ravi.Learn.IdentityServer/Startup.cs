@@ -3,16 +3,15 @@
 
 
 using IdentityServer4;
+using IdentityServer4.Services;
+using IdentityServer4.Test;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Ravi.Learn.IdentityServer.Configurations;
-using System.Security.Cryptography.X509Certificates;
-using IdentityServer4.Test;
-using IdentityServer4.Services;
 
 namespace Ravi.Learn.IdentityServer
 {
@@ -63,12 +62,12 @@ namespace Ravi.Learn.IdentityServer
                 //.AddInMemoryIdentityResources(Config.Ids)
                 //.AddInMemoryClients(Config.Clients)
                 //.AddInMemoryApiResources(Config.Apis);
-                
-                
+
+
                 // this adds the config data from DB (clients, resources, CORS)
                 .AddConfigurationStore(options =>
                 {
-                    options.ConfigureDbContext = builder => builder.UseSqlServer(idpConfigurationConnectionString, sql=>sql.MigrationsAssembly("Ravi.Learn.IdentityServer"));
+                    options.ConfigureDbContext = builder => builder.UseSqlServer(idpConfigurationConnectionString, sql => sql.MigrationsAssembly("Ravi.Learn.IdentityServer"));
                 })
                 // this adds the operational data from DB (codes, tokens, consents)
                 .AddOperationalStore(options =>
@@ -78,7 +77,7 @@ namespace Ravi.Learn.IdentityServer
                     // this enables automatic token cleanup. this is optional.
                     options.EnableTokenCleanup = true;
                 });
-                
+
 
             // not recommended for production - you need to store your key material somewhere secure
             if (Environment.IsDevelopment())

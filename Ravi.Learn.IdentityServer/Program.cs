@@ -48,7 +48,7 @@ namespace Ravi.Learn.IdentityServer
                 {
                     Log.Information("Seeding database...");
                     var config = host.Services.GetRequiredService<IConfiguration>();
-                    var idpConfigurationConnectionStrong = config.GetConnectionString("IdpConfigurationDb");                    
+                    var idpConfigurationConnectionStrong = config.GetConnectionString("IdpConfigurationDb");
                     SeedData.EnsureSeedData(idpConfigurationConnectionStrong);
                     Log.Information("Done seeding database.");
                     return 0;

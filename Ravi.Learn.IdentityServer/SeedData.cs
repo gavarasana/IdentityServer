@@ -5,12 +5,12 @@
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Interfaces;
 using IdentityServer4.EntityFramework.Mappers;
+using IdentityServer4.EntityFramework.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using IdentityServer4.EntityFramework.Storage;
-using Serilog;
 using Ravi.Learn.IdentityServer.Configurations;
+using Serilog;
+using System.Linq;
 
 namespace Ravi.Learn.IdentityServer
 {
@@ -32,7 +32,7 @@ namespace Ravi.Learn.IdentityServer
             var serviceProvider = services.BuildServiceProvider();
 
             using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
-                        //scope.ServiceProvider.GetService<PersistedGrantDbContext>().Database.Migrate();
+            //scope.ServiceProvider.GetService<PersistedGrantDbContext>().Database.Migrate();
             var context = scope.ServiceProvider.GetService<ConfigurationDbContext>();
             //context.Database.Migrate();
             EnsureSeedData(context);

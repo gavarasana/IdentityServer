@@ -1,6 +1,5 @@
-using System.Security.Claims;
-using System.Threading.Tasks;
 using IdentityServer4.Stores;
+using System.Threading.Tasks;
 
 namespace Ravi.Learn.IdentityServer.Extensions
 {

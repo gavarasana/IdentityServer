@@ -3,7 +3,6 @@
 
 
 using IdentityModel;
-using IdentityServer4.EntityFramework.Entities;
 using IdentityServer4.Test;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -14,8 +13,8 @@ namespace Ravi.Learn.IdentityServer.Configurations
     {
         public static List<TestUser> Users = new List<TestUser>
         {
-            new TestUser{SubjectId = "AE24C6F7-44AF-4079-B1C5-F8B6CAAA3A30", Username = "alice", Password = "alice", 
-                Claims = 
+            new TestUser{SubjectId = "ae24c6f7-44af-4079-b1c5-f8b6caaa3a30", Username = "alice", Password = "alice",
+                Claims =
                 {
                     new Claim(JwtClaimTypes.Name, "Alice Smith"),
                     new Claim(JwtClaimTypes.GivenName, "Alice"),
@@ -27,8 +26,8 @@ namespace Ravi.Learn.IdentityServer.Configurations
                     new Claim(JwtClaimTypes.Role, "FreeUser")
                 }
             },
-            new TestUser{SubjectId = "B4150C1F-8BA0-4AA7-9F8F-FFB3FBD92367", Username = "bob", Password = "bob", 
-                Claims = 
+            new TestUser{SubjectId = "b4150c1f-8ba0-4aa7-9f8f-ffb3fbd92367", Username = "bob", Password = "bob",
+                Claims =
                 {
                     new Claim(JwtClaimTypes.Name, "Bob Smith"),
                     new Claim(JwtClaimTypes.GivenName, "Bob"),
@@ -41,7 +40,7 @@ namespace Ravi.Learn.IdentityServer.Configurations
                     new Claim(JwtClaimTypes.Role, "PaidUser")
                 }
             },
-            new TestUser{SubjectId = "B9D6BA2B-F15A-4E04-9BB0-7104D189F69C", Username = "Frank", Password = "password",
+            new TestUser{SubjectId = "b9d6ba2b-f15a-4e04-9bb0-7104d189f69c", Username = "Frank", Password = "password",
                 Claims =
                 {
                     new Claim(JwtClaimTypes.Name, "Frank Underwood"),
@@ -51,10 +50,10 @@ namespace Ravi.Learn.IdentityServer.Configurations
                     new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                     new Claim(JwtClaimTypes.WebSite, "http://frankunderwood.com"),
                     new Claim(JwtClaimTypes.Address, @"{ 'street_address': '123 Main Street', 'locality': 'Aldie', 'postal_code': 20101, 'country': 'USA' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
-                    new Claim(JwtClaimTypes.Role,"PaidUser")
+                    new Claim(JwtClaimTypes.Role,"FreeUser")
                 }
             },
-            new TestUser{SubjectId = "9E5C49D9-EBB7-461C-9F9E-7785DB816302", Username = "Claire", Password = "password",
+            new TestUser{SubjectId = "9e5c49d9-ebb7-461c-9f9e-7785db816302", Username = "Claire", Password = "password",
                 Claims =
                 {
                     new Claim(JwtClaimTypes.Name, "Claire Underwood"),

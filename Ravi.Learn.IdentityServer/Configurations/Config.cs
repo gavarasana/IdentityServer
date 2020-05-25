@@ -69,7 +69,7 @@ namespace Ravi.Learn.IdentityServer.Configurations
                     ClientName = "Image Gallery",
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris = { "https://localhost:44389/signin-oidc" },
-                    PostLogoutRedirectUris = { "https://localhost:44389/signout-callback-oidc" },                    
+                    PostLogoutRedirectUris = { "https://localhost:44389/signout-callback-oidc" },
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
