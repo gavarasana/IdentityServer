@@ -17,7 +17,9 @@ namespace Ravi.Learn.IdentityServer.Configurations
                 new IdentityResources.Profile(),
                 new IdentityResources.Address(),
                 new IdentityResources.Email(),
-                new IdentityResource("roles", "Your role(s)", new List<string> {"role"})
+                new IdentityResource("roles", "Your role(s)", new List<string> {"role"}),
+                new IdentityResource("country", "Your country", new List<string> { "country" }),
+                new IdentityResource("subscription", "Your subscription", new List<string> { "subscription"})
             };
 
 
@@ -77,7 +79,9 @@ namespace Ravi.Learn.IdentityServer.Configurations
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
                         "imagegalleryapi",
-                        "roles"
+                        "roles",
+                        "country",
+                        "subscription"
                     },
                     ClientSecrets = { new Secret ("D7B60E4F-1924-462E-9DA4-A6A18CD997ED".Sha256()) }
                 },
