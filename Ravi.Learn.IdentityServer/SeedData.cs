@@ -5,39 +5,38 @@
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Interfaces;
 using IdentityServer4.EntityFramework.Mappers;
+using IdentityServer4.EntityFramework.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using IdentityServer4.EntityFramework.Storage;
-using Serilog;
 using Ravi.Learn.IdentityServer.Configurations;
+using Serilog;
+using System.Linq;
 
 namespace Ravi.Learn.IdentityServer
 {
     public class SeedData
     {
-        public static void EnsureSeedData(string connectionString)
+        public static void EnsureSeedData(string idpConfigurationConnectionStrong) //, string idpGrantsConnectionString)
         {
             var services = new ServiceCollection();
-            services.AddOperationalDbContext(options =>
-            {
-                options.ConfigureDbContext = db => db.UseSqlServer(connectionString, sql => sql.MigrationsAssembly("Ravi.Learn.IdentityServer"));
-            });
+
             services.AddConfigurationDbContext(options =>
             {
-                options.ConfigureDbContext = db => db.UseSqlServer(connectionString, sql => sql.MigrationsAssembly("Ravi.Learn.IdentityServer"));
+                options.ConfigureDbContext = db => db.UseSqlServer(idpConfigurationConnectionStrong, sql => sql.MigrationsAssembly("Ravi.Learn.IdentityServer"));
             });
+            //services.AddOperationalDbContext(options =>
+            //{
+            //    options.ConfigureDbContext = db => db.UseSqlServer(idpGrantsConnectionString, sql => sql.MigrationsAssembly("Ravi.Learn.IdentityServer"));
+            //});
 
             var serviceProvider = services.BuildServiceProvider();
 
-            using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                scope.ServiceProvider.GetService<PersistedGrantDbContext>().Database.Migrate();
+            using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            //scope.ServiceProvider.GetService<PersistedGrantDbContext>().Database.Migrate();
+            var context = scope.ServiceProvider.GetService<ConfigurationDbContext>();
+            //context.Database.Migrate();
+            EnsureSeedData(context);
 
-                var context = scope.ServiceProvider.GetService<ConfigurationDbContext>();
-                context.Database.Migrate();
-                EnsureSeedData(context);
-            }
         }
 
         private static void EnsureSeedData(IConfigurationDbContext context)

@@ -2,13 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ravi.Learn.IdentityServer.Attributes;
 using Ravi.Learn.IdentityServer.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Ravi.Learn.IdentityServer.Controllers
 {

@@ -3,20 +3,20 @@
 
 
 using IdentityServer4.Events;
+using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Linq;
-using System.Threading.Tasks;
+using Ravi.Learn.IdentityServer.Attributes;
+using Ravi.Learn.IdentityServer.Extensions;
+using Ravi.Learn.IdentityServer.Messages;
 using Ravi.Learn.IdentityServer.Models;
 using Ravi.Learn.IdentityServer.Options;
-using Ravi.Learn.IdentityServer.Attributes;
-using Ravi.Learn.IdentityServer.Messages;
-using Ravi.Learn.IdentityServer.Extensions;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Ravi.Learn.IdentityServer.Controllers
 {

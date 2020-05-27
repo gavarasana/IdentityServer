@@ -2,9 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
@@ -18,6 +15,9 @@ using Ravi.Learn.IdentityServer.Messages;
 using Ravi.Learn.IdentityServer.Models;
 using Ravi.Learn.IdentityServer.Models.Device;
 using Ravi.Learn.IdentityServer.Options;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Ravi.Learn.IdentityServer.Controllers
 {
@@ -180,7 +180,7 @@ namespace Ravi.Learn.IdentityServer.Controllers
 
                 RememberConsent = model?.RememberConsent ?? true,
                 ScopesConsented = model?.ScopesConsented ?? Enumerable.Empty<string>(),
-                
+
                 ClientName = client.ClientName ?? client.ClientId,
                 ClientUrl = client.ClientUri,
                 ClientLogoUrl = client.LogoUri,

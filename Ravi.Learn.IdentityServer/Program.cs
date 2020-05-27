@@ -48,8 +48,8 @@ namespace Ravi.Learn.IdentityServer
                 {
                     Log.Information("Seeding database...");
                     var config = host.Services.GetRequiredService<IConfiguration>();
-                    var connectionString = config.GetConnectionString("DefaultConnection");
-                    SeedData.EnsureSeedData(connectionString);
+                    var idpConfigurationConnectionStrong = config.GetConnectionString("IdpConfigurationDb");
+                    SeedData.EnsureSeedData(idpConfigurationConnectionStrong);
                     Log.Information("Done seeding database.");
                     return 0;
                 }
