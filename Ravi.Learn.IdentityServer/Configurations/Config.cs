@@ -67,6 +67,10 @@ namespace Ravi.Learn.IdentityServer.Configurations
                 //Image Gallery Client
                 new Client
                 {
+                    AccessTokenType = AccessTokenType.Reference,
+                    IdentityTokenLifetime = 120,
+                    AllowOfflineAccess = true,
+                    UpdateAccessTokenClaimsOnRefresh = true,
                     ClientId = "imagegalleryclient",
                     ClientName = "Image Gallery",
                     AllowedGrantTypes = GrantTypes.Code,
