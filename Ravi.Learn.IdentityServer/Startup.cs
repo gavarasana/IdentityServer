@@ -3,15 +3,19 @@
 
 
 using IdentityServer4;
+using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Test;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ravi.Learn.IdentityServer.Configurations;
+using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Ravi.Learn.IdentityServer
 {
@@ -50,6 +54,8 @@ namespace Ravi.Learn.IdentityServer
             var idpConfigurationConnectionString = Configuration.GetConnectionString("IdpConfigurationDb");
             var idpGrantsConnectionString = Configuration.GetConnectionString("IdpGrantsDb");
 
+            var migrationAssembly = typeof(Startup).Assembly.GetName().Name;
+
             var builder = services.AddIdentityServer(options =>
                 {
                     options.Events.RaiseErrorEvents = true;
@@ -67,27 +73,27 @@ namespace Ravi.Learn.IdentityServer
                 // this adds the config data from DB (clients, resources, CORS)
                 .AddConfigurationStore(options =>
                 {
-                    options.ConfigureDbContext = builder => builder.UseSqlServer(idpConfigurationConnectionString, sql => sql.MigrationsAssembly("Ravi.Learn.IdentityServer"));
+                    options.ConfigureDbContext = builder => builder.UseSqlServer(idpConfigurationConnectionString, sql => sql.MigrationsAssembly(migrationAssembly));
                 })
                 // this adds the operational data from DB (codes, tokens, consents)
                 .AddOperationalStore(options =>
                 {
-                    options.ConfigureDbContext = builder => builder.UseSqlServer(idpGrantsConnectionString, sql => sql.MigrationsAssembly("Ravi.Learn.IdentityServer"));
+                    options.ConfigureDbContext = builder => builder.UseSqlServer(idpGrantsConnectionString, sql => sql.MigrationsAssembly(migrationAssembly));
 
                     // this enables automatic token cleanup. this is optional.
                     options.EnableTokenCleanup = true;
                 });
 
 
-            // not recommended for production - you need to store your key material somewhere secure
+            //not recommended for production - you need to store your key material somewhere secure
             if (Environment.IsDevelopment())
             {
                 builder.AddDeveloperSigningCredential();
             }
-            //else
-            //{
-            //    builder.AddValidationKey(GetCertificate(CertificateTimeType.Previous));
-            //}
+            else
+            {
+                builder.AddSigningCredential(GetCertificate(Configuration["thumbprint"]));
+            }
 
             services.AddAuthentication()
                 .AddGoogle(options =>
@@ -100,6 +106,11 @@ namespace Ravi.Learn.IdentityServer
                     options.ClientId = "copy client ID from Google here";
                     options.ClientSecret = "copy client secret from Google here";
                 });
+        }
+
+        private SecurityKeyInfo[] GetCertificate()
+        {
+            throw new NotImplementedException();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -121,10 +132,17 @@ namespace Ravi.Learn.IdentityServer
             });
         }
 
-        //public X509Certificate2 GetCertificate(CertificateTimeType certificateTimeType)
-        //{
-        //    return null;
-        //}
+        public X509Certificate2 GetCertificate(string thumbprint)
+        {
+            using var store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
+            store.Open(OpenFlags.ReadOnly);
+            var certCollection = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, true);
+            if (certCollection.Count == 0)
+            {
+                throw new Exception("The specified certificate was not found");
+            }
+            return certCollection[0];
+        }
     }
 
     public enum CertificateTimeType

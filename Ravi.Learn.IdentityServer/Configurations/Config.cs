@@ -5,6 +5,7 @@
 using IdentityServer4;
 using IdentityServer4.Models;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace Ravi.Learn.IdentityServer.Configurations
 {
@@ -27,7 +28,10 @@ namespace Ravi.Learn.IdentityServer.Configurations
             new ApiResource[]
             {
                 new ApiResource("api1", "My API #1"),
-                new ApiResource("imagegalleryapi", "Image Gallery Api", new[] {"role"})
+                new ApiResource("imagegalleryapi", "Image Gallery Api", new[] { "role" })
+                {
+                    ApiSecrets = new List<Secret> { new Secret("34896FFB69534D04BA22BE93E30AF15C".Sha256())}
+                }
             };
 
 
@@ -43,7 +47,8 @@ namespace Ravi.Learn.IdentityServer.Configurations
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
 
-                    AllowedScopes = { "api1" }
+                    AllowedScopes = { "imagegalleryapi" },
+                    Claims = new  List<Claim> { new Claim("Permission","ReadImages") }
                 },
 
                 // MVC client using code flow + pkce
@@ -87,7 +92,8 @@ namespace Ravi.Learn.IdentityServer.Configurations
                         "country",
                         "subscription"
                     },
-                    ClientSecrets = { new Secret ("D7B60E4F-1924-462E-9DA4-A6A18CD997ED".Sha256()) }
+                    ClientSecrets = { new Secret ("D7B60E4F-1924-462E-9DA4-A6A18CD997ED".Sha256()) },
+                    
                 },
 
                 // SPA client using code flow + pkce
