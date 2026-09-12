@@ -68,6 +68,7 @@ public class Index : PageModel
 
             // delete local authentication cookie
             await HttpContext.SignOutAsync();
+            await HttpContext.SignOutAsync(Microsoft.AspNetCore.Identity.IdentityConstants.ApplicationScheme);
 
             // see if we need to trigger federated logout
             var idp = User.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;

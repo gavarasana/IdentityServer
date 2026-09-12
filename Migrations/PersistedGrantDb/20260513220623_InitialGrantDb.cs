@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Hobron.IdentityServer.Migrations.PersistedGrantDb
 {
     /// <inheritdoc />
-    public partial class InitialPersistedGrantDb : Migration
+    public partial class InitialGrantDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
