@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hobron.IdentityServer.Migrations.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
-    [Migration("20260201194524_InitialConfigurationDb")]
-    partial class InitialConfigurationDb
+    [Migration("20260513220501_InitialConfigDb")]
+    partial class InitialConfigDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

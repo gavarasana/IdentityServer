@@ -1,9 +1,12 @@
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using Duende.IdentityServer;
+using Hobron.IdentityServer.Data;
+using Hobron.IdentityServer.Models;
 using Hobron.IdentityServer.Pages.Admin.ApiScopes;
 using Hobron.IdentityServer.Pages.Admin.Clients;
 using Hobron.IdentityServer.Pages.Admin.IdentityScopes;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -53,6 +56,16 @@ internal static class HostingExtensions
     {
         builder.Services.AddHttpContextAccessor();
 
+        var identityConnectionString = builder.Configuration.GetConnectionString("IdentityUsers");
+        ArgumentException.ThrowIfNullOrWhiteSpace(identityConnectionString);
+
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(identityConnectionString));
+
+        builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+
         builder.Services.AddRazorPages()
             .AddRazorRuntimeCompilation();
 
@@ -78,7 +91,6 @@ internal static class HostingExtensions
                     options.Diagnostics.ChunkSize = 1024 * 1024 * 10; // 10 MB
                 }
             })
-            .AddTestUsers(TestUsers.Users)
             // this adds the config data from DB (clients, resources, CORS)
             .AddConfigurationStore(options =>
             {
@@ -96,6 +108,7 @@ internal static class HostingExtensions
                     b.UseSqlServer(grantConnectionString,
                         dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
             })
+            .AddAspNetIdentity<ApplicationUser>()
             .AddServerSideSessions()
             .AddLicenseSummary();
 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hobron.IdentityServer.Migrations.PersistedGrantDb
 {
     [DbContext(typeof(PersistedGrantDbContext))]
-    [Migration("20260201194542_InitialPersistedGrantDb")]
-    partial class InitialPersistedGrantDb
+    [Migration("20260513220623_InitialGrantDb")]
+    partial class InitialGrantDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

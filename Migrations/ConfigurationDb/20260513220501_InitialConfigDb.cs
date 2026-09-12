@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Hobron.IdentityServer.Migrations.ConfigurationDb
 {
     /// <inheritdoc />
-    public partial class InitialConfigurationDb : Migration
+    public partial class InitialConfigDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

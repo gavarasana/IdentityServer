@@ -4,10 +4,11 @@ using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
-using Duende.IdentityServer.Test;
 using Hobron.IdentityServer.Extensions;
+using Hobron.IdentityServer.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -17,11 +18,12 @@ namespace Hobron.IdentityServer.Pages.Login;
 [AllowAnonymous]
 public class Index : PageModel
 {
-    private readonly TestUserStore _users;
     private readonly IIdentityServerInteractionService _interaction;
     private readonly IEventService _events;
     private readonly IAuthenticationSchemeProvider _schemeProvider;
     private readonly IIdentityProviderStore _identityProviderStore;
+    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     public ViewModel View { get; set; } = default!;
 
@@ -33,15 +35,15 @@ public class Index : PageModel
         IAuthenticationSchemeProvider schemeProvider,
         IIdentityProviderStore identityProviderStore,
         IEventService events,
-        TestUserStore? users = null)
+        SignInManager<ApplicationUser> signInManager,
+        UserManager<ApplicationUser> userManager)
     {
-        // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-        _users = users ?? throw new InvalidOperationException("Please call 'AddTestUsers(TestUsers.Users)' on the IIdentityServerBuilder in Startup or remove the TestUserStore from the AccountController.");
-
         _interaction = interaction;
         _schemeProvider = schemeProvider;
         _identityProviderStore = identityProviderStore;
         _events = events;
+        _signInManager = signInManager;
+        _userManager = userManager;
     }
 
     public async Task<IActionResult> OnGet(string? returnUrl)
@@ -94,40 +96,25 @@ public class Index : PageModel
 
         if (ModelState.IsValid)
         {
-            // validate username/password against in-memory store
-            if (_users.ValidateCredentials(Input.Username, Input.Password))
+            ArgumentNullException.ThrowIfNull(Input.Username);
+            ArgumentNullException.ThrowIfNull(Input.Password);
+
+            var result = await _signInManager.PasswordSignInAsync(
+                Input.Username,
+                Input.Password,
+                Input.RememberLogin,
+                lockoutOnFailure: true);
+
+            if (result.Succeeded)
             {
-                var user = _users.FindByUsername(Input.Username);
-                await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username, clientId: context?.Client.ClientId));
+                var user = await _userManager.FindByNameAsync(Input.Username);
+                if (user is null)
+                {
+                    throw new InvalidOperationException("Authenticated user was not found in the user store.");
+                }
+
+                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName ?? Input.Username, user.Id, user.UserName ?? Input.Username, clientId: context?.Client.ClientId));
                 Telemetry.Metrics.UserLogin(context?.Client.ClientId, IdentityServerConstants.LocalIdentityProvider);
-
-                // only set explicit expiration here if user chooses "remember me".
-                // otherwise we rely upon expiration configured in cookie middleware.
-                var props = new AuthenticationProperties();
-                if (LoginOptions.AllowRememberLogin && Input.RememberLogin)
-                {
-                    props.IsPersistent = true;
-                    props.ExpiresUtc = DateTimeOffset.UtcNow.Add(LoginOptions.RememberMeLoginDuration);
-                }
-
-                // pick out just the picture and role claim (or add all claims if you prefer)
-                var pictureClaim = user.Claims.FirstOrDefault(c => c.Type == "picture");
-                var roleClaims = user.Claims.Where(c => c.Type == "role");
-
-                // Expand the claims to include the picture claim and any role claims
-                var extraClaims = pictureClaim != null ? [pictureClaim] : Array.Empty<Claim>();
-                if (roleClaims.Any())
-                {
-                    extraClaims = [.. extraClaims, .. roleClaims];
-                }
-
-                var isuser = new IdentityServerUser(user.SubjectId)
-                {
-                    DisplayName = user.Username,
-                    AdditionalClaims = extraClaims
-                };
-
-                await HttpContext.SignInAsync(isuser, props);
 
                 if (context != null)
                 {
@@ -159,6 +146,11 @@ public class Index : PageModel
                     // user might have clicked on a malicious link - should be logged
                     throw new ArgumentException("invalid return URL");
                 }
+            }
+
+            if (result.IsLockedOut)
+            {
+                ModelState.AddModelError(string.Empty, "Account is locked out. Please try again later.");
             }
 
             const string error = "invalid credentials";
